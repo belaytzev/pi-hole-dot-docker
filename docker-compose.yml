@@ -9,6 +9,8 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
+    mem_limit: 256m
+    mem_reservation: 128m
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
     ports:
       - "53:53/tcp" #DNS
@@ -24,6 +26,8 @@ services:
     # Volumes store your data between container upgrades
     # Recommended but not required (DHCP needs NET_ADMIN)
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      DNS1: 172.22.0.100
+    #  DNS2:
     dns:
       - 127.0.0.1
       - 1.1.1.1
@@ -34,4 +38,16 @@ services:
   unbound:
     container_name: unbound
     image: mvance/unbound:latest
+    mem_limit: 256m
+    mem_reservation: 128m
+    networks:
+      service1_net:
+        ipv4_address: 172.22.0.100
     restart: unless-stopped
+
+networks:
+  pi-hole:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.22.0.0/16
