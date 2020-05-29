@@ -7,6 +7,7 @@ version: "2.4"
 # https://github.com/MatthewVance/unbound-docker
 services:
   pihole:
+    hostname: pi-hole
     container_name: pihole
     image: pihole/pihole:latest
     mem_limit: 256m
@@ -44,6 +45,7 @@ services:
     restart: unless-stopped
 
   unbound:
+    hostname: unbound
     container_name: unbound
     image: mvance/unbound:latest
     mem_limit: 256m
