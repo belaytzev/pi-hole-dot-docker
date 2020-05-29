@@ -41,7 +41,7 @@ services:
     mem_limit: 256m
     mem_reservation: 128m
     networks:
-      service1_net:
+      pi-hole:
         ipv4_address: 172.22.0.100
     restart: unless-stopped
 
