@@ -5,6 +5,7 @@ version: "2.4"
 #
 # Unbound image
 # https://github.com/MatthewVance/unbound-docker
+
 services:
   pihole:
     hostname: pi-hole
@@ -17,18 +18,18 @@ services:
       - "53:53/tcp" #DNS
       - "53:53/udp" #DNS
       #- "67:67/udp" #DHCP
-      - "10.11.0.3:80:80/tcp" # Web Interface
+      - "80:80/tcp" # Web Interface
     volumes:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
     environment:
-      TZ: 'Europe/Moscow'
+      TZ: 'UTC'
       # WEBPASSWORD: 'set a secure password here or it will be random'
     # Volumes store your data between container upgrades
     # Recommended but not required (DHCP needs NET_ADMIN)
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-      DNS1: 172.22.0.100
-    #  DNS2:
+      DNS1: 172.22.0.101
+      DNS2: 172.22.0.102
     dns:
       - 127.0.0.1
       - 1.1.1.1
@@ -36,7 +37,7 @@ services:
       - NET_ADMIN
     networks:
       pi-hole:
-        ipv4_address: 172.22.0.101
+        ipv4_address: 172.22.0.100
     logging:
         driver: "json-file"
         options:
@@ -52,7 +53,23 @@ services:
     mem_reservation: 128m
     networks:
       pi-hole:
-        ipv4_address: 172.22.0.100
+        ipv4_address: 172.22.0.101
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "10"
+            max-size: "10m"
+    restart: unless-stopped
+
+  unbound-fallback:
+    hostname: unbound-fallback
+    container_name: unbound-fallback
+    image: mvance/unbound:latest
+    mem_limit: 256m
+    mem_reservation: 128m
+    networks:
+      pi-hole:
+        ipv4_address: 172.22.0.102
     logging:
         driver: "json-file"
         options:
