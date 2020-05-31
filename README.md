@@ -11,4 +11,3 @@
 * Get latest release https://github.com/belaytzev/pi-hole-dot-docker/releases/latest
 * Run docker-compose file
 * Enjoy more secure Internet!
-
