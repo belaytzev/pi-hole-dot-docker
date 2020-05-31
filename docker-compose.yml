@@ -25,16 +25,11 @@ services:
     environment:
       TZ: 'UTC'
       # WEBPASSWORD: 'set a secure password here or it will be random'
-    # Volumes store your data between container upgrades
-    # Recommended but not required (DHCP needs NET_ADMIN)
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
       DNS1: 172.22.0.101
       DNS2: 172.22.0.102
     dns:
       - 127.0.0.1
       - 1.1.1.1
-    cap_add:
-      - NET_ADMIN
     networks:
       pi-hole:
         ipv4_address: 172.22.0.100
