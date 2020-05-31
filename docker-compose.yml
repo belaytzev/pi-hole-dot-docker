@@ -2,9 +2,6 @@ version: "2.4"
 
 # Pi-Hole Image
 # https://github.com/pi-hole/docker-pi-hole/blob/master/README.md
-#
-# Unbound image
-# https://github.com/MatthewVance/unbound-docker
 
 services:
   pihole:
@@ -24,7 +21,7 @@ services:
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
     environment:
       TZ: 'UTC'
-      # WEBPASSWORD: 'set a secure password here or it will be random'
+      WEBPASSWORD: 'password'
       DNS1: 172.22.0.101
       DNS2: 172.22.0.102
     dns:
@@ -43,7 +40,9 @@ services:
   unbound:
     hostname: unbound
     container_name: unbound
-    image: mvance/unbound:latest
+    build:
+      context: ./unbound
+      dockerfile: Dockerfile
     mem_limit: 256m
     mem_reservation: 128m
     networks:
@@ -59,7 +58,9 @@ services:
   unbound-fallback:
     hostname: unbound-fallback
     container_name: unbound-fallback
-    image: mvance/unbound:latest
+    build:
+      context: ./unbound
+      dockerfile: Dockerfile
     mem_limit: 256m
     mem_reservation: 128m
     networks:
